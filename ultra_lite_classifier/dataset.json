@@ -2326,6 +2326,90 @@
     {
         "text": "Proceed the purchase of this transaction with Dana or BRI Mastercard",
         "label": 2
+    },
+    {
+        "text": "I want to buy the blue jacket",
+        "label": 0
+    },
+    {
+        "text": "Pick the number 2",
+        "label": 1
+    },
+    {
+        "text": "Proceed the purchase of this transaction with Dana or BRI Mastercard",
+        "label": 2
+    },
+    {
+        "text": "I want to buy the white shirt",
+        "label": 0
+    },
+    {
+        "text": "Select the number 1 from the list",
+        "label": 1
+    },
+    {
+        "text": "Proceed the purchase of this transaction with Dana or BNI Mastercard",
+        "label": 2
+    },
+    {
+        "text": "I want to buy the white shirt",
+        "label": 0
+    },
+    {
+        "text": "Select the number 1 from the list",
+        "label": 1
+    },
+    {
+        "text": "Purchase this transaction with Dana only",
+        "label": 2
+    },
+    {
+        "text": "I want to buy the pants that is suitable for summer",
+        "label": 0
+    },
+    {
+        "text": "Number 1 is good, proceed",
+        "label": 1
+    },
+    {
+        "text": "Purchase this transaction with Gopay or Dana",
+        "label": 2
+    },
+    {
+        "text": "I want buy the best shirt for formal occasion",
+        "label": 0
+    },
+    {
+        "text": "Proceed the number 3",
+        "label": 1
+    },
+    {
+        "text": "Proceed the payment with Dana",
+        "label": 2
+    },
+    {
+        "text": "I will buy the small thick M-sized shirt for summer",
+        "label": 0
+    },
+    {
+        "text": "I will go with the first clothes",
+        "label": 1
+    },
+    {
+        "text": "Proceed the purchase with Dana",
+        "label": 2
+    },
+    {
+        "text": "Buy me a big thick M-sized shirt for summer",
+        "label": 0
+    },
+    {
+        "text": "Give me the second item",
+        "label": 1
+    },
+    {
+        "text": "Proceed the purchase with Ovo",
+        "label": 2
     }
 
 ]

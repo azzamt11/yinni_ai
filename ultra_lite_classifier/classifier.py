@@ -3,6 +3,7 @@ import torch.nn as nn
 import json
 import pickle
 import os
+import sys
 from model import UltraLiteClassifier
 
 class TextPredictor:
@@ -213,63 +214,70 @@ def interactive_test():
     """
     Interactive command-line interface for testing
     """
-    print("=" * 60)
-    print("TEXT CLASSIFIER - INTERACTIVE MODE")
-    print("=" * 60)
-    
+
+    # ===== HEADER / BANNERS (MUST NOT APPEAR) =====
+    # print("=" * 60)
+    # print("TEXT CLASSIFIER - INTERACTIVE MODE")
+    # print("=" * 60)
+
     # First check if files exist
     if not check_model_files():
-        print("\nCannot start. Missing model files.")
+        # print("\nCannot start. Missing model files.")
         return
-    
+
     try:
         # Initialize predictor
         predictor = TextPredictor()
     except Exception as e:
-        print(f"Failed to initialize predictor: {e}")
-        print("\nTry re-training the model:")
-        print("   python main.py")
+        # print(f"Failed to initialize predictor: {e}")
+        # print("\nTry re-training the model:")
+        # print("   python main.py")
         return
-    
-    print("\nCommands:")
-    print("  - Type any text to classify")
-    print("  - 'batch' : Enter batch mode")
-    print("  - 'prob'  : Toggle probability details")
-    print("  - 'vocab' : Show vocabulary info")
-    print("  - 'model' : Show model info")
-    print("  - 'quit'  : Exit")
-    print("-" * 60)
-    
+
+    # ===== COMMAND HELP TEXT (MUST NOT APPEAR) =====
+    # print("\nCommands:")
+    # print("  - Type any text to classify")
+    # print("  - 'batch' : Enter batch mode")
+    # print("  - 'prob'  : Toggle probability details")
+    # print("  - 'vocab' : Show vocabulary info")
+    # print("  - 'model' : Show model info")
+    # print("  - 'quit'  : Exit")
+    # print("-" * 60)
+
     show_details = False
-    
+
     while True:
         try:
             user_input = input("\n📝 Enter text or command: ").strip()
-            
+
             if user_input.lower() == 'quit':
-                print("Goodbye!")
+                # print("Goodbye!")
                 break
+
             elif user_input.lower() == 'prob':
                 show_details = not show_details
-                status = "ON" if show_details else "OFF"
-                print(f"Probability details: {status}")
+                # status = "ON" if show_details else "OFF"
+                # print(f"Probability details: {status}")
                 continue
+
             elif user_input.lower() == 'vocab':
-                print(f"\nVocabulary:")
-                print(f"   Size: {len(predictor.vocab)}")
-                print(f"   First 10 items:")
-                for i, (word, idx) in enumerate(list(predictor.vocab.items())[:10]):
-                    print(f"     '{word}' → {idx}")
+                # print(f"\nVocabulary:")
+                # print(f"   Size: {len(predictor.vocab)}")
+                # print(f"   First 10 items:")
+                # for i, (word, idx) in enumerate(list(predictor.vocab.items())[:10]):
+                #     print(f"     '{word}' → {idx}")
                 continue
+
             elif user_input.lower() == 'model':
-                print(f"\nModel info:")
-                print(f"   Embedding: {predictor.model.embedding}")
-                print(f"   FC layer: {predictor.model.fc}")
-                print(f"   Classes: {predictor.class_names}")
+                # print(f"\nModel info:")
+                # print(f"   Embedding: {predictor.model.embedding}")
+                # print(f"   FC layer: {predictor.model.fc}")
+                # print(f"   Classes: {predictor.class_names}")
                 continue
+
             elif user_input.lower() == 'batch':
-                print("\n=== BATCH MODE ===")
-                print("Enter multiple texts (one per line). Type 'END' when done:")
+                # print("\n=== BATCH MODE ===")
+                # print("Enter multiple texts (one per line). Type 'END' when done:")
                 texts = []
                 while True:
                     text = input("> ").strip()
@@ -277,52 +285,56 @@ def interactive_test():
                         break
                     if text:
                         texts.append(text)
-                
+
                 if texts:
                     results = predictor.predict_batch(texts)
-                    print("\n" + "=" * 60)
-                    print("BATCH RESULTS:")
-                    print("=" * 60)
-                    for i, result in enumerate(results):
-                        print(f"\n{i+1}. 📄 Text: {result['text'][:50]}...")
-                        if 'error' in result:
-                            print(f"   Error: {result['error']}")
-                        else:
-                            print(f"   {result['predicted_class']} "
-                                  f"(Confidence: {result['confidence']:.1%})")
+                    # print("\n" + "=" * 60)
+                    # print("BATCH RESULTS:")
+                    # print("=" * 60)
+                    # for i, result in enumerate(results):
+                    #     print(f"\n{i+1}. 📄 Text: {result['text'][:50]}...")
+                    #     if 'error' in result:
+                    #         print(f"   Error: {result['error']}")
+                    #     else:
+                    #         print(f"   {result['predicted_class']} "
+                    #               f"(Confidence: {result['confidence']:.1%})")
                 continue
+
             elif user_input.lower() == '':
                 continue
-            
-            # Single prediction
+
+            # ===== SINGLE PREDICTION =====
             if show_details:
                 result = predictor.predict(user_input, return_details=True)
-                
+
                 if 'error' in result:
-                    print(f"Error: {result['error']}")
+                    # print(f"Error: {result['error']}")
+                    pass
                 else:
-                    print("\n" + "=" * 60)
-                    print(f"INPUT: {result['text']}")
-                    print(f"PREDICTION: {result['predicted_class']} "
-                          f"(ID: {result['class_id']})")
-                    print(f"CONFIDENCE: {result['confidence']:.2%}")
-                    print(f"TOKENS: {result['num_tokens']} tokens")
-                    print("\nALL PROBABILITIES:")
-                    for class_name, prob in result['probabilities'].items():
-                        bar_length = int(prob * 30)
-                        bar = "█" * bar_length + "░" * (30 - bar_length)
-                        print(f"  {class_name:15s} {prob:6.2%} {bar}")
-                    print("=" * 60)
+                    # print("\n" + "=" * 60)
+                    # print(f"INPUT: {result['text']}")
+                    # print(f"PREDICTION: {result['predicted_class']} "
+                    #       f"(ID: {result['class_id']})")
+                    # print(f"CONFIDENCE: {result['confidence']:.2%}")
+                    # print(f"TOKENS: {result['num_tokens']} tokens")
+                    # print("\nALL PROBABILITIES:")
+                    # for class_name, prob in result['probabilities'].items():
+                    #     bar_length = int(prob * 30)
+                    #     bar = "█" * bar_length + "░" * (30 - bar_length)
+                    #     print(f"  {class_name:15s} {prob:6.2%} {bar}")
+                    # print("=" * 60)
+                    pass
             else:
                 predicted_class, confidence = predictor.predict(user_input)
-                print(f"→ {predicted_class} (Confidence: {confidence:.1%})")
-                
+                # print(f"→ {predicted_class} (Confidence: {confidence:.1%})")
+
         except KeyboardInterrupt:
-            print("\n\nInterrupted. Exiting...")
+            # print("Interrupted. Exiting...")
             break
         except Exception as e:
-            print(f"Error: {e}")
-            print("Please try again.")
+            # print(f"Error: {e}")
+            # print("Please try again.")
+            pass
 
 def quick_test():
     """
@@ -355,9 +367,36 @@ def quick_test():
         print(f"Error: {e}")
 
 if __name__ == "__main__":
-    
-    # Clear screen for better visibility
-    os.system('cls' if os.name == 'nt' else 'clear')
-    
-    # Start interactive test
-    interactive_test()
+    import sys
+    import json
+
+    # CLI / SERVICE MODE
+    if len(sys.argv) > 1:
+        text = sys.argv[1]
+
+        try:
+            predictor = TextPredictor()
+            predicted_class, confidence = predictor.predict(text)
+
+            result = {
+                "type": predicted_class.lower(),
+                "confidence": float(confidence),
+                "value": text  # or extracted entity if you have one
+            }
+
+            print(json.dumps(result))
+            sys.exit(0)
+
+        except Exception as e:
+            print(json.dumps({
+                "type": "unknown",
+                "confidence": 0.0,
+                "value": "",
+                "error": str(e)
+            }))
+            sys.exit(1)
+
+    # INTERACTIVE MODE (human)
+    else:
+        os.system('cls' if os.name == 'nt' else 'clear')
+        interactive_test()

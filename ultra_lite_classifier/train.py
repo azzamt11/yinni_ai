@@ -57,7 +57,7 @@ class TextClassifier(nn.Module):
         _, (hidden, _) = self.rnn(embeds)
         return self.fc(hidden[-1])
 
-def train_model(model, dataset, epochs=10, lr=0.001):
+def train_model(model, dataset, epochs=7, lr=0.001):
     # Create collate function for EmbeddingBag
     def collate_batch_embeddingbag(batch):
         label_list, text_list, offsets = [], [], [0]
