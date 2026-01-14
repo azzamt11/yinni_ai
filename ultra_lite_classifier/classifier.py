@@ -5,6 +5,7 @@ import pickle
 import os
 import sys
 from model import UltraLiteClassifier
+from rapidfuzz import process, fuzz
 
 class TextPredictor:
     def __init__(self, model_path='ulc_model_weights.pth', 
@@ -42,10 +43,10 @@ class TextPredictor:
         # Use the larger of the two to be safe
         vocab_size_to_use = max(actual_vocab_size, config_vocab_size)
         
-        print(f"Vocabulary info:")
-        print(f"   - Loaded vocab size: {actual_vocab_size}")
-        print(f"   - Config vocab size: {config_vocab_size}")
-        print(f"   - Using vocab size: {vocab_size_to_use}")
+        # print(f"Vocabulary info:")
+        # print(f"   - Loaded vocab size: {actual_vocab_size}")
+        # print(f"   - Config vocab size: {config_vocab_size}")
+        # print(f"   - Using vocab size: {vocab_size_to_use}")
         
         # Initialize model with CORRECT vocabulary size
         self.model = UltraLiteClassifier(
@@ -62,31 +63,31 @@ class TextPredictor:
         checkpoint_keys = set(checkpoint.keys())
         model_keys = set(model_state_dict.keys())
         
-        print(f"\nModel checkpoint analysis:")
-        print(f"   - Checkpoint keys: {checkpoint_keys}")
-        print(f"   - Model keys: {model_keys}")
+        # print(f"\nModel checkpoint analysis:")
+        # print(f"   - Checkpoint keys: {checkpoint_keys}")
+        # print(f"   - Model keys: {model_keys}")
         
         # Try to load state dict
         try:
             self.model.load_state_dict(checkpoint, strict=True)
-            print("Model loaded successfully!")
+            # print("Model loaded successfully!")
         except RuntimeError as e:
-            print(f"Warning: {e}")
-            print("   Trying partial load...")
+            # print(f"Warning: {e}")
+            # print("   Trying partial load...")
             
             # Try partial load
             self.model.load_state_dict(checkpoint, strict=False)
-            print("Model loaded (partial match)")
+            # print("Model loaded (partial match)")
         
         self.model.eval()  # Set to evaluation mode
         
         # Get class names
         self.class_names = self.config.get('class_names', ['Type_0', 'Type_1', 'Type_2'])
         
-        print(f"\nModel ready for inference!")
-        print(f"   Classes: {self.class_names}")
-        print(f"   Embedding dimension: {self.config.get('embed_dim', 128)}")
-        print(f"   Number of classes: {self.config['num_classes']}")
+        # print(f"\nModel ready for inference!")
+        # print(f"   Classes: {self.class_names}")
+        # print(f"   Embedding dimension: {self.config.get('embed_dim', 128)}")
+        # print(f"   Number of classes: {self.config['num_classes']}")
     
     def tokenize_text(self, text):
         """
@@ -126,7 +127,7 @@ class TextPredictor:
             offsets = torch.tensor([0])
             
             # Debug info
-            print(f"Tokenized: {len(tokens)} tokens")
+            # print(f"Tokenized: {len(tokens)} tokens")
             
             # Inference
             with torch.no_grad():
@@ -366,6 +367,73 @@ def quick_test():
     except Exception as e:
         print(f"Error: {e}")
 
+ORDINAL_MAP = {
+    "first": 1,
+    "second": 2,
+    "third": 3,
+    "fourth": 4,
+    "fifth": 5,
+    "sixth": 6,
+    "seventh": 7,
+    "eighth": 8,
+    "ninth": 9,
+    "tenth": 10,
+    "last": -1,
+    "1": 1,
+    "2": 2,
+    "3": 3,
+    "4": 4,
+    "5": 5,
+    "6": 6,
+    "7": 7,
+    "8": 8,
+    "9": 9,
+    "10": 10,
+}
+
+PAYMENT_MAP = {
+    "ovo": "OVO",
+    "dana": "DANA",
+    "gopay": "GOPAY",
+    "shopeepay": "SHOPEEPAY",
+    "bca": "BCA",
+    "bri": "BRI",
+    "mandiri": "MANDIRI",
+    "bni": "BNI",
+    "mastercard": "MASTERCARD",
+    "visa": "VISA",
+    "kredivo": "KREDIVO",
+}
+
+def extract_ordinal(text, threshold=60):
+    tokens = text.lower().split()
+
+    match, score, _ = process.extractOne(
+        " ".join(tokens),
+        ORDINAL_MAP.keys(),
+        scorer=fuzz.partial_ratio
+    )
+
+    if score >= threshold:
+        return ORDINAL_MAP[match]
+
+    return None
+
+def extract_payment(text, threshold=70):
+    tokens = text.lower().split()
+
+    match, score, _ = process.extractOne(
+        " ".join(tokens),
+        PAYMENT_MAP.keys(),
+        scorer=fuzz.partial_ratio
+    )
+
+    if score >= threshold:
+        return PAYMENT_MAP[match]
+
+    return "UNSPECIFIED"
+
+
 if __name__ == "__main__":
     import sys
     import json
@@ -378,10 +446,15 @@ if __name__ == "__main__":
             predictor = TextPredictor()
             predicted_class, confidence = predictor.predict(text)
 
+            if predicted_class == "Select_Option":
+                text = extract_ordinal(text)
+            elif predicted_class == "Make_Payment":
+                text = extract_payment(text)
+
             result = {
                 "type": predicted_class.lower(),
                 "confidence": float(confidence),
-                "value": text  # or extracted entity if you have one
+                "value": text
             }
 
             print(json.dumps(result))

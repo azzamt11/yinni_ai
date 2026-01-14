@@ -2410,6 +2410,90 @@
     {
         "text": "Proceed the purchase with Ovo",
         "label": 2
+    },
+    {
+        "text": "I want the pant for party",
+        "label": 0
+    },
+    {
+        "text": "Give me the lest one",
+        "label": 1
+    },
+    {
+        "text": "Proceed the purchase with BRI VA",
+        "label": 2
+    },
+    {
+        "text": "I want the shirt for party",
+        "label": 0
+    },
+    {
+        "text": "Give me the eighth one",
+        "label": 1
+    },
+    {
+        "text": "Proceed the purchase with BCI VA",
+        "label": 2
+    },
+    {
+        "text": "I want to buy the jacket",
+        "label": 0
+    },
+    {
+        "text": "Give me 8",
+        "label": 1
+    },
+    {
+        "text": "Proceed the purchase with OCBC VA",
+        "label": 2
+    },
+    {
+        "text": "I want to buy the shirt and shorts",
+        "label": 0
+    },
+    {
+        "text": "Give me 1",
+        "label": 1
+    },
+    {
+        "text": "Purchase it, with Mastercard",
+        "label": 2
+    },
+    {
+        "text": "I would like to buy the jacket, white and smooth",
+        "label": 0
+    },
+    {
+        "text": "Give me the number 9",
+        "label": 1
+    },
+    {
+        "text": "Purchase it, with OVO",
+        "label": 2
+    },
+    {
+        "text": "I like buy the orchid pants",
+        "label": 0
+    },
+    {
+        "text": "10 is good for me",
+        "label": 1
+    },
+    {
+        "text": "Purchase OVO to it",
+        "label": 2
+    },
+    {
+        "text": "I want to buy the orchid jcket with spoks",
+        "label": 0
+    },
+    {
+        "text": "You want to recommend me some shorts",
+        "label": 0
+    },
+    {
+        "text": "Mastercard pay it",
+        "label": 2
     }
 
 ]

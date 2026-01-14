@@ -67,7 +67,7 @@ def main():
 
     # 4. Start Training
     print("\nStarting training...")
-    train_model(model, dataset, epochs=7)
+    train_model(model, dataset, epochs=9)
     
     # 5. Save artifacts for inference
     save_training_artifacts(model, dataset, class_names)
