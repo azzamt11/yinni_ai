@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  ultra-lite-classifier:
+    # Context should be the folder where the code and Dockerfile live
+    build: 
+      context: ./ultra_lite_classifier
+      dockerfile: Dockerfile 
+    container_name: ultra-lite-classifier
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./ultra_lite_classifier:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: always
