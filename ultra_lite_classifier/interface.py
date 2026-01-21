@@ -4,7 +4,7 @@ from classifier import TextPredictor, extract_ordinal, extract_payment
 # Page configuration
 st.set_page_config(page_title="UltraLite Classifier Test", page_icon="🔍")
 
-st.title("🔍 Classifier Model Tester")
+st.title("Classifier Model Tester")
 st.markdown("Enter a message below to see how the model classifies it and extracts data.")
 
 # Initialize model (cached so it only loads once)

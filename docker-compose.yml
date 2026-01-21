@@ -2,15 +2,20 @@ version: '3.8'
 
 services:
   ultra-lite-classifier:
-    # Context should be the folder where the code and Dockerfile live
+    # Change context to the root directory
     build: 
-      context: ./ultra_lite_classifier
-      dockerfile: Dockerfile 
+      context: . 
+      dockerfile: ultra_lite_classifier/Dockerfile 
     container_name: ultra-lite-classifier
     ports:
       - "8501:8501"
     volumes:
+      # Map the subfolder to /app so your code changes sync
       - ./ultra_lite_classifier:/app
+      # Map the model files individually so they are available in /app
+      - ./ulc_model_config.json:/app/ulc_model_config.json
+      - ./ulc_model_weights.pth:/app/ulc_model_weights.pth
+      - ./ulc_vocab.pkl:/app/ulc_vocab.pkl
     environment:
       - PYTHONUNBUFFERED=1
     restart: always
